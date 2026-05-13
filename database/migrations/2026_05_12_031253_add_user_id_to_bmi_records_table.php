@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::table('bmi_records', function (Blueprint $table) {
 
-            $table->unsignedBigInteger('user_id')
-                ->default(1)
-                ->after('id');
+            $table->foreignId('user_id')
+                  ->constrained()
+                  ->onDelete('cascade')
+                  ->after('id');
         });
     }
 
@@ -25,6 +26,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bmi_records', function (Blueprint $table) {
+
+            $table->dropForeign(['user_id']);
 
             $table->dropColumn('user_id');
         });
