@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // ✅ REGISTER
+    // REGISTER
     public function register(Request $request)
     {
         $request->validate([
@@ -24,13 +24,16 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'message' => 'Register berhasil',
+            'token' => $token,
             'user' => $user
         ]);
     }
 
-    // ✅ LOGIN
+    // LOGIN
     public function login(Request $request)
     {
         $request->validate([
@@ -38,16 +41,31 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where(
+            'email',
+            $request->email
+        )->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (
+            !$user ||
+            !Hash::check(
+                $request->password,
+                $user->password
+            )
+        ) {
             return response()->json([
-                'message' => 'Email atau password salah'
+                'message' =>
+                'Email atau password salah'
             ], 401);
         }
 
+        $token = $user
+            ->createToken('auth_token')
+            ->plainTextToken;
+
         return response()->json([
             'message' => 'Login berhasil',
+            'token' => $token,
             'user' => $user
         ]);
     }

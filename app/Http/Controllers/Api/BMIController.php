@@ -58,7 +58,7 @@ class BMIController extends Controller
 
             BmiRecord::create([
 
-                'user_id' => $request->user_id,
+                'user_id' => auth()->id(),
 
                 'berat' => $berat,
 
@@ -110,13 +110,15 @@ class BMIController extends Controller
     // =========================
     // HISTORY BMI
     // =========================
-    public function history($user_id)
-    {
-        $history = BmiRecord::where(
-            'user_id',
-            $user_id
-        )->latest()->get();
+    public function history()
+{
+    $history = BmiRecord::where(
+        'user_id',
+        auth()->id()
+    )
+    ->latest()
+    ->get();
 
-        return response()->json($history);
-    }
+    return response()->json($history);
+}
 }
