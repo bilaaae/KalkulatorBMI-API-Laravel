@@ -41,15 +41,15 @@ class BMIController extends Controller
 
             if ($bmi < 18.5) {
 
-                $kategori = "Kurus";
+                $kategori = "Kekurangan Berat Badan";
 
             } elseif ($bmi < 25) {
 
-                $kategori = "Normal";
+                $kategori = "Berat Badan Ideal";
 
             } elseif ($bmi < 30) {
 
-                $kategori = "Gemuk";
+                $kategori = "Berat Badan Berlebih";
 
             } else {
 
